@@ -1,0 +1,71 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Dashboard
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-list-header>
+      <h2>Total Equity</h2>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>
+        <h2>{{ totalEquity$ | async | currency }}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      <h2>Holdings</h2>
+    </ion-list-header>
+    <ion-item *ngFor="let stock of userProfileStocks$ | async">
+      <ion-label>
+        <h2>{{ stock.symbol }}</h2>
+        <p>{{ stock.name }}</p>
+        <p>{{ stock.amount }} shares</p>
+        <p>
+          <ion-text [color]="stock.change >= 0 ? 'success' : 'danger'">
+            {{ stock.price | currency }} ({{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }} / {{ stock.changePercentage | number:'1.2-2' }}%)
+          </ion-text>
+        </p>
+        <p>Value: {{ (stock.price * (stock.amount || 0)) | currency }}</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="openStockModal('Buy', stock)">Buy</ion-button>
+        <ion-button (click)="openStockModal('Sell', stock)">Sell</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <!-- Trending Stocks Carousel -->
+  <ion-list>
+    <ion-list-header>
+      <h2>Trending Stocks</h2>
+    </ion-list-header>
+    <ion-item *ngFor="let stock of trendingStocks$ | async">
+      <ion-label>
+        <h2>{{ stock.symbol }}</h2>
+        <p>{{ stock.name }}</p>
+        <p>
+          <ion-text [color]="stock.change >= 0 ? 'success' : 'danger'">
+            {{ stock.price | currency }} ({{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }} / {{ stock.changePercentage | number:'1.2-2' }}%)
+          </ion-text>
+        </p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="openStockModal('Buy', stock)">Buy</ion-button>
+        <ion-button *ngIf="stock.isInProfile" (click)="openStockModal('Sell', stock)">Sell</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+</ion-content>

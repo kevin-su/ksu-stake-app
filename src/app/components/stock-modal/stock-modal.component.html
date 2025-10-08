@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ action }} {{ stock.symbol }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="stock$ | async as liveStock">
+  <ion-item lines="none">
+    <ion-label>
+      <h2>Current Price</h2>
+      <p>
+        <ion-text [color]="liveStock.change >= 0 ? 'success' : 'danger'">
+          {{ liveStock.price | currency }} ({{ liveStock.change >= 0 ? '+' : '' }}{{ liveStock.change | number:'1.2-2' }} / {{ liveStock.changePercentage | number:'1.2-2' }}%)
+        </ion-text>
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Amount</ion-label>
+    <ion-input type="number" [(ngModel)]="amount"></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="confirm()">Confirm {{ action }}</ion-button>
+</ion-content>

@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Search
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-searchbar (ionInput)="handleInput($event)"></ion-searchbar>
+
+  <ion-list>
+    <ion-item *ngFor="let stock of searchResults$ | async">
+      <ion-label>
+        <h2>{{ stock.symbol }}</h2>
+        <p>{{ stock.name }}</p>
+        <p>
+          <ion-text [color]="stock.change >= 0 ? 'success' : 'danger'">
+            {{ stock.price | currency }} ({{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }} / {{ stock.changePercentage | number:'1.2-2' }}%)
+          </ion-text>
+        </p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="openStockModal('Buy', stock)">Buy</ion-button>
+        <ion-button *ngIf="stock.isInProfile" (click)="openStockModal('Sell', stock)">Sell</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+</ion-content>
