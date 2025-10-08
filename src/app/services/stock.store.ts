@@ -57,7 +57,6 @@ export class StockStore extends ComponentStore<StockState> {
           this.stockService.buyStock(stock, amount).pipe(
             tap(() => {
               this.updater((state) => {
-                // Update the amount in our separate tracking
                 const currentAmount =
                   state.userStockAmounts[stock.symbol] ?? stock.amount ?? 0;
                 const newAmount = currentAmount + amount;
